@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Catálogo de Jogos</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; }
+        .form-container { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        input, textarea { width: 100%; margin: 10px 0; padding: 10px; border-radius: 4px; border: none; }
+        button { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+        .game-card { background: #1e1e1e; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 5px solid #28a745; }
+        .game-card h3 { margin: 0; }
+        .game-card a { color: #007bff; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 Publicador de Jogos</h1>
+
+    <div class="form-container">
+        <h3>Adicionar Novo Jogo</h3>
+        <input type="text" id="nome" placeholder="Nome do Jogo">
+        <textarea id="descricao" placeholder="Descrição do jogo"></textarea>
+        <input type="text" id="link" placeholder="Link do Mediafire">
+        <input type="text" id="imagemUrl" placeholder="Link da Imagem (Opcional)">
+        <button onclick="salvarJogo()">Publicar Jogo</button>
+    </div>
+
+    <hr>
+
+    <div id="lista-jogos">
+        </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyANG8-gOrsk3LZz_9kYqQnz-X7ZVbDQ6x4",
+            authDomain: "specialapk-12982.firebaseapp.com",
+            projectId: "specialapk-12982",
+            storageBucket: "specialapk-12982.firebasestorage.app",
+            messagingSenderId: "27533590283",
+            appId: "1:27533590283:web:143892ea20a65d7f392c0e",
+            measurementId: "G-CR7JBM8TD9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Função para salvar no Firestore
+        window.salvarJogo = async () => {
+            const nome = document.getElementById('nome').value;
+            const descricao = document.getElementById('descricao').value;
+            const link = document.getElementById('link').value;
+            const imagemUrl = document.getElementById('imagemUrl').value;
+
+            if (nome && link) {
+                try {
+                    await addDoc(collection(db, "jogos"), {
+                        nome, descricao, link, imagemUrl, data: new Date()
+                    });
+                    alert("Jogo publicado!");
+                    document.querySelectorAll('input, textarea').forEach(i => i.value = '');
+                } catch (e) {
+                    console.error("Erro ao salvar: ", e);
+                }
+            } else {
+                alert("Preencha o nome e o link!");
+            }
+        };
+
+        // Função para carregar jogos em tempo real
+        onSnapshot(collection(db, "jogos"), (snapshot) => {
+            const container = document.getElementById('lista-jogos');
+            container.innerHTML = "<h2>Catálogo</h2>";
+            snapshot.forEach((doc) => {
+                const jogo = doc.data();
+                container.innerHTML += `
+                    <div class="game-card">
+                        ${jogo.imagemUrl ? `<img src="${jogo.imagemUrl}" style="width:100px; display:block; margin-bottom:10px;">` : ''}
+                        <h3>${jogo.nome}</h3>
+                        <p>${jogo.descricao}</p>
+                        <a href="${jogo.link}" target="_blank">⬇️ Baixar via Mediafire</a>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+  </html>
 
