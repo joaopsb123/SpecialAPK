@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Controle</title>
+    <style>
+        body { background: #121212; color: white; font-family: sans-serif; display: flex; justify-content: center; padding: 50px; }
+        .panel { background: #1e1e1e; padding: 30px; border-radius: 15px; width: 100%; max-width: 400px; border: 1px solid #00ff73; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box;}
+        button { width: 100%; padding: 15px; background: #00ff73; border: none; font-weight: bold; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h2>🚀 Postar Jogo</h2>
+        <input type="text" id="nome" placeholder="Título do Jogo">
+        <textarea id="descricao" rows="4" placeholder="Descrição detalhada"></textarea>
+        <input type="text" id="link" placeholder="Link do Mediafire">
+        <input type="text" id="imagemUrl" placeholder="Link da Imagem (Capa)">
+        <button onclick="enviar()">PUBLICAR NO SITE</button>
+        <p><a href="index.html" style="color: #aaa;">Voltar ao site</a></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyANG8-gOrsk3LZz_9kYqQnz-X7ZVbDQ6x4",
+            authDomain: "specialapk-12982.firebaseapp.com",
+            projectId: "specialapk-12982",
+            storageBucket: "specialapk-12982.firebasestorage.app",
+            messagingSenderId: "27533590283",
+            appId: "1:27533590283:web:143892ea20a65d7f392c0e",
+            measurementId: "G-CR7JBM8TD9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.enviar = async () => {
+            const btn = document.querySelector('button');
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+
+            try {
+                await addDoc(collection(db, "jogos"), {
+                    nome: document.getElementById('nome').value,
+                    descricao: document.getElementById('descricao').value,
+                    link: document.getElementById('link').value,
+                    imagemUrl: document.getElementById('imagemUrl').value,
+                    dataCriacao: new Date()
+                });
+                alert("Jogo salvo para sempre!");
+                window.location.href = "index.html";
+            } catch (e) { alert("Erro!"); btn.disabled = false; }
+        }
+    </script>
+</body>
+</html>
