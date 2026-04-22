@@ -3,435 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Espaço APK | Download de Jogos Android Modificados</title>
-    <meta name="description" content="Baixe os melhores jogos Android modificados. Catálogo atualizado com APKs premium.">
-    <meta name="google-site-verification" content="2WVmzDBXADMLj4A62OjzHfmY82XA-ZNgvSg-z9A0hsM" />
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>Espaço APK | Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg: #080a0c; --card: #12161b; --accent: #00ff73; --text: #ffffff; --text-dim: #94a3b8; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0c0f;
-            color: #ffffff;
-            min-height: 100vh;
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+
+        /* HEADER & BUSCA */
+        header { 
+            background: var(--card); 
+            padding: 20px; 
+            border-bottom: 1px solid #222; 
+            position: sticky; top: 0; z-index: 100;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
         }
-        
-        /* Header */
-        .header {
-            background: #14181c;
-            border-bottom: 1px solid #2a2f34;
-            padding: 15px 20px;
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .logo-text {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-            text-decoration: none;
-        }
-        
-        .logo-text span {
-            color: #00ff73;
-        }
-        
-        /* Debug Info */
-        .debug-info {
-            background: #1a1f24;
-            border: 1px solid #ffaa00;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            color: #ffaa00;
-            font-family: monospace;
-            font-size: 14px;
-        }
-        
-        .debug-info button {
-            background: #00ff73;
-            color: #000;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        
-        /* Search */
-        .search-section {
-            background: #0d1115;
-            border-bottom: 1px solid #2a2f34;
-            padding: 20px;
-        }
-        
-        .search-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .logo { font-weight: 700; font-size: 1.5rem; color: var(--accent); letter-spacing: -1px; }
         
         .search-box {
-            position: relative;
-            margin-bottom: 15px;
+            width: 100%; max-width: 500px; position: relative;
         }
-        
         .search-box input {
-            width: 100%;
-            padding: 14px 20px 14px 45px;
-            background: #0a0c0f;
-            border: 2px solid #2a2f34;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 16px;
+            width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid #333;
+            background: #1a2026; color: white; outline: none; transition: 0.3s;
         }
+        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,255,115,0.2); }
+
+        /* CATEGORIAS */
+        .categories {
+            display: flex; gap: 10px; overflow-x: auto; width: 100%; max-width: 1100px; padding: 10px 0;
+            scrollbar-width: none;
+        }
+        .cat-btn {
+            background: #1a2026; border: 1px solid #333; color: white; padding: 8px 18px;
+            border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.9rem;
+        }
+        .cat-btn.active { background: var(--accent); color: black; font-weight: bold; }
+
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+
+        /* GRID DE JOGOS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
         
-        .search-box input:focus {
-            outline: none;
-            border-color: #00ff73;
+        .card { 
+            background: var(--card); border-radius: 16px; overflow: hidden; transition: 0.3s; 
+            border: 1px solid #222; position: relative;
         }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
         
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-        }
+        .card-body { padding: 12px; }
+        .card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .card-meta { font-size: 0.75rem; color: var(--text-dim); display: flex; justify-content: space-between; }
+
+        /* MODAL ESTILIZADO */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--card); width: 90%; max-width: 450px; border-radius: 24px; animation: pop 0.3s ease; overflow: hidden; }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
-        .filter-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .modal-header { height: 200px; width: 100%; position: relative; }
+        .modal-header img { width: 100%; height: 100%; object-fit: cover; }
+        .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-weight: bold; }
         
-        .filter-btn {
-            padding: 10px 20px;
-            background: #0a0c0f;
-            border: 2px solid #2a2f34;
-            border-radius: 10px;
-            color: #9ba1a9;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .filter-btn.active {
-            background: #00ff73;
-            border-color: #00ff73;
-            color: #000;
-        }
-        
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-        
-        /* Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-        }
-        
-        .card {
-            background: #14181c;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #2a2f34;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #00ff73;
-        }
-        
-        .card-img {
-            aspect-ratio: 3/4;
-            overflow: hidden;
-        }
-        
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .card-info {
-            padding: 15px;
-        }
-        
-        .card-info h3 {
-            font-size: 14px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #9ba1a9;
-            background: #14181c;
-            border-radius: 12px;
-            border: 1px solid #2a2f34;
-            grid-column: 1 / -1;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .modal-content {
-            background: #14181c;
-            max-width: 700px;
-            width: 100%;
-            max-height: 90vh;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid #2a2f34;
-        }
-        
-        .modal-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid #2a2f34;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h2 {
-            color: #00ff73;
-        }
-        
-        .close-btn {
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-        
-        .close-btn:hover {
-            background: rgba(255,77,77,0.2);
-            color: #ff4d4d;
-        }
-        
-        .modal-body {
-            padding: 25px;
-            overflow-y: auto;
-            max-height: calc(90vh - 80px);
-        }
-        
-        .game-detail {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 25px;
-        }
-        
-        .game-image img {
-            width: 100%;
-            border-radius: 12px;
-        }
-        
-        .game-description {
-            color: #9ba1a9;
-            margin: 20px 0;
-        }
-        
-        .btn-download {
-            display: block;
-            padding: 16px;
-            background: #00ff73;
-            color: #000;
-            text-align: center;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 50px;
-            margin-top: 20px;
-        }
-        
-        .btn-download:hover {
-            box-shadow: 0 10px 30px rgba(0, 255, 115, 0.3);
-        }
-        
-        /* Admin Button */
-        .admin-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 50px;
-            height: 50px;
-            background: #14181c;
-            border: 1px solid #2a2f34;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00ff73;
-            text-decoration: none;
-            font-size: 22px;
-            opacity: 0.5;
-            z-index: 500;
-        }
-        
-        .admin-btn:hover {
-            opacity: 1;
-        }
-        
-        /* Footer */
-        footer {
-            background: #14181c;
-            border-top: 1px solid #2a2f34;
-            padding: 30px 20px;
-            text-align: center;
-            color: #9ba1a9;
-            margin-top: 50px;
-        }
-        
-        @media (max-width: 768px) {
-            .game-detail {
-                grid-template-columns: 1fr;
-            }
-            
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .modal-info { padding: 25px; text-align: center; }
+        .dl-section { background: #1a2026; padding: 15px; border-radius: 15px; margin-top: 20px; }
+        .btn-main { background: var(--accent); color: black; display: block; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; margin-top: 10px; transition: 0.2s; }
+        .btn-main:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+        /* ADMIN FLOATING */
+        .admin-fab { position: fixed; bottom: 25px; right: 25px; background: #fff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 99; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <span>🚀</span>
-                <a href="index.html" class="logo-text">ESPAÇO <span>APK</span></a>
-            </div>
-            <div>
-                <span id="totalGames">0</span> Jogos
-            </div>
+    <header>
+        <div class="logo">ESPAÇO APK</div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Pesquisar jogos..." onkeyup="filtrarJogos()">
+        </div>
+        <div class="categories" id="categoryList">
+            <button class="cat-btn active" onclick="filtrarCategoria('Todos')">Todos</button>
+            <button class="cat-btn" onclick="filtrarCategoria('Terror')">Terror</button>
+            <button class="cat-btn" onclick="filtrarCategoria('Ação')">Ação</button>
+            <button class="cat-btn" onclick="filtrarCategoria('Fnaf')">FNaF</button>
+            <button class="cat-btn" onclick="filtrarCategoria('Outros')">Outros</button>
         </div>
     </header>
 
-    <!-- Debug Info (vai mostrar status do Firebase) -->
-    <div id="debugInfo" class="debug-info">
-        <strong>🔍 Status:</strong> <span id="debugStatus">Inicializando...</span><br>
-        <span id="debugDetails"></span><br>
-        <button onclick="location.reload()">🔄 Recarregar Página</button>
-        <button onclick="window.location.href='postar.html'">➕ Adicionar Jogo de Exemplo</button>
-    </div>
-
-    <!-- Search -->
-    <section class="search-section">
-        <div class="search-container">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Pesquisar jogos..." autocomplete="off">
-            </div>
-            <div class="filter-row">
-                <button class="filter-btn active" data-filter="all">📋 Todos</button>
-                <button class="filter-btn" data-filter="recent">🕒 Recentes</button>
-                <button class="filter-btn" data-filter="popular">🔥 Populares</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Container -->
     <div class="container">
-        <div id="lista-jogos" class="grid">
-            <div class="empty-state">
-                <h3>⏳ Carregando...</h3>
-            </div>
-        </div>
+        <div id="lista-jogos" class="grid"></div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2026 Espaço APK - Jogos Modificados para Android</p>
-    </footer>
-
-    <!-- Modal -->
     <div id="gameModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Detalhes</h2>
-                <div class="close-btn" onclick="fecharModal()">✕</div>
+                <span class="close-btn" onclick="fecharModal()">✕</span>
+                <img id="m-img" src="">
             </div>
-            <div id="modalData" class="modal-body"></div>
+            <div class="modal-info">
+                <h2 id="m-nome" style="margin:0"></h2>
+                <p id="m-desc" style="color: var(--text-dim); margin: 15px 0; font-size: 0.9rem;"></p>
+                <div class="dl-section">
+                    <span style="font-size: 0.8rem; color: var(--accent);">Disponível via Mediafire</span>
+                    <a href="#" id="m-link" target="_blank" class="btn-main">BAIXAR AGORA</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Admin Button -->
-    <a href="postar.html" class="admin-btn">⚙️</a>
+    <a href="postar.html" class="admin-fab">⚙️</a>
 
-    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Elementos de debug
-        const debugStatus = document.getElementById('debugStatus');
-        const debugDetails = document.getElementById('debugDetails');
-        
-        // Atualizar debug
-        function updateDebug(status, details, isError = false) {
-            debugStatus.textContent = status;
-            debugDetails.textContent = details;
-            if (isError) {
-                debugStatus.style.color = '#ff4d4d';
-            } else {
-                debugStatus.style.color = '#00ff73';
-            }
-        }
-
-        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyANG8-gOrsk3LZz_9kYqQnz-X7ZVbDQ6x4",
             authDomain: "specialapk-12982.firebaseapp.com",
@@ -442,191 +127,60 @@
             measurementId: "G-CR7JBM8TD9"
         };
 
-        updateDebug('🟡 Conectando ao Firebase...', 'Inicializando app');
-
-        let app;
-        let db;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
         let todosJogos = [];
-        
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            updateDebug('🟢 Firebase inicializado', 'Conectando ao Firestore...');
-        } catch (error) {
-            updateDebug('🔴 Erro ao inicializar Firebase', error.message, true);
-            console.error('Firebase init error:', error);
-        }
 
-        const container = document.getElementById('lista-jogos');
-        const totalSpan = document.getElementById('totalGames');
+        // BUSCAR DADOS
+        onSnapshot(query(collection(db, "jogos"), orderBy("dataCriacao", "desc")), (snapshot) => {
+            todosJogos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderizar(todosJogos);
+        });
 
-        // DADOS DE EXEMPLO (caso Firestore esteja vazio)
-        const dadosExemplo = [
-            {
-                nome: "Minecraft Mod Infinito",
-                descricao: "Minecraft com dinheiro infinito, todos os itens desbloqueados e mod menu completo.",
-                link: "https://www.mediafire.com/",
-                imagemUrl: "https://placehold.co/200x267/14181c/00ff73?text=Minecraft"
-            },
-            {
-                nome: "GTA San Andreas Mod",
-                descricao: "GTA San Andreas com vida infinita, todas as armas e veículos desbloqueados.",
-                link: "https://www.mediafire.com/",
-                imagemUrl: "https://placehold.co/200x267/14181c/00ff73?text=GTA+SA"
-            },
-            {
-                nome: "Free Fire Mod",
-                descricao: "Free Fire com aimbot, wallhack e todos os personagens desbloqueados.",
-                link: "https://www.mediafire.com/",
-                imagemUrl: "https://placehold.co/200x267/14181c/00ff73?text=Free+Fire"
-            },
-            {
-                nome: "Among Us Mod",
-                descricao: "Among Us com sempre impostor, skins infinitas e sem anúncios.",
-                link: "https://www.mediafire.com/",
-                imagemUrl: "https://placehold.co/200x267/14181c/00ff73?text=Among+Us"
-            },
-            {
-                nome: "Clash Royale Mod",
-                descricao: "Clash Royale com gemas infinitas, todas as cartas desbloqueadas.",
-                link: "https://www.mediafire.com/",
-                imagemUrl: "https://placehold.co/200x267/14181c/00ff73?text=Clash+Royale"
-            },
-            {
-                nome: "Subway Surfers Mod",
-                descricao: "Subway Surfers com moedas infinitas, todos os personagens e hoverboards.",
-                link: "https://www.mediafire.com/",
-                imagemUrl: "https://placehold.co/200x267/14181c/00ff73?text=Subway"
-            }
-        ];
-
-        // Função para renderizar jogos
-        function renderizarJogos(jogos) {
-            if (!jogos || jogos.length === 0) {
-                // Usar dados de exemplo
-                jogos = dadosExemplo;
-                updateDebug('🟠 Usando dados de exemplo', 'Firestore vazio ou sem conexão. Mostrando exemplos.');
-            } else {
-                updateDebug('🟢 Dados carregados com sucesso!', `${jogos.length} jogo(s) encontrados no Firestore.`);
-            }
-            
-            todosJogos = jogos;
-            totalSpan.textContent = jogos.length;
-            
+        function renderizar(lista) {
+            const container = document.getElementById('lista-jogos');
             container.innerHTML = "";
-            
-            jogos.forEach((jogo) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                
-                card.innerHTML = `
-                    <div class="card-img">
-                        <img src="${jogo.imagemUrl}" 
-                             alt="${jogo.nome}"
-                             onerror="this.src='https://placehold.co/200x267/14181c/00ff73?text=Erro'">
-                    </div>
-                    <div class="card-info">
-                        <h3>${jogo.nome}</h3>
+            lista.forEach(jogo => {
+                container.innerHTML += `
+                    <div class="card" onclick='abrirModal(${JSON.stringify(jogo).replace(/'/g, "&apos;")})'>
+                        <img src="${jogo.imagemUrl || ''}">
+                        <div class="card-body">
+                            <span class="card-title">${jogo.nome}</span>
+                            <div class="card-meta">
+                                <span>APK</span>
+                                <span style="color:var(--accent)">Free</span>
+                            </div>
+                        </div>
                     </div>
                 `;
-                
-                card.onclick = () => abrirModal(jogo);
-                container.appendChild(card);
             });
         }
 
-        // Carregar do Firestore
-        async function carregarJogos() {
-            try {
-                updateDebug('🟡 Buscando jogos...', 'Consultando Firestore');
-                
-                const q = query(collection(db, "jogos"), orderBy("dataCriacao", "desc"));
-                const snapshot = await getDocs(q);
-                
-                if (snapshot.empty) {
-                    updateDebug('🟠 Nenhum jogo encontrado', 'O Firestore está vazio. Use o botão "Postar Jogo" para adicionar!');
-                    renderizarJogos([]);
-                    return;
-                }
-                
-                const jogos = [];
-                snapshot.forEach((doc) => {
-                    jogos.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-                
-                renderizarJogos(jogos);
-                
-            } catch (error) {
-                console.error('Erro ao carregar:', error);
-                updateDebug('🔴 Erro ao carregar do Firestore', error.message, true);
-                renderizarJogos([]);
-            }
-        }
+        // SISTEMA DE BUSCA
+        window.filtrarJogos = () => {
+            const termo = document.getElementById('searchInput').value.toLowerCase();
+            const filtrados = todosJogos.filter(j => j.nome.toLowerCase().includes(termo));
+            renderizar(filtrados);
+        };
 
-        // Abrir modal
+        // SISTEMA DE CATEGORIA
+        window.filtrarCategoria = (cat) => {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            if(cat === 'Todos') return renderizar(todosJogos);
+            const filtrados = todosJogos.filter(j => j.categoria === cat);
+            renderizar(filtrados);
+        };
+
         window.abrirModal = (jogo) => {
-            const modal = document.getElementById('gameModal');
-            const content = document.getElementById('modalData');
-            const modalTitle = document.getElementById('modalTitle');
-            
-            modalTitle.textContent = jogo.nome;
-            
-            content.innerHTML = `
-                <div class="game-detail">
-                    <div class="game-image">
-                        <img src="${jogo.imagemUrl}" 
-                             alt="${jogo.nome}"
-                             onerror="this.src='https://placehold.co/200x267/14181c/00ff73?text=Erro'">
-                    </div>
-                    <div class="game-info">
-                        <div class="game-description">
-                            ${jogo.descricao || 'Nenhuma descrição disponível.'}
-                        </div>
-                        
-                        <a href="${jogo.link}" target="_blank" class="btn-download">
-                            ⬇️ BAIXAR VIA MEDIAFIRE
-                        </a>
-                        
-                        <p style="color: #6c757d; font-size: 12px; text-align: center; margin-top: 15px;">
-                            Você será redirecionado para o Mediafire
-                        </p>
-                    </div>
-                </div>
-            `;
-            
-            modal.style.display = "flex";
-            document.body.style.overflow = 'hidden';
+            document.getElementById('m-img').src = jogo.imagemUrl;
+            document.getElementById('m-nome').innerText = jogo.nome;
+            document.getElementById('m-desc').innerText = jogo.descricao;
+            document.getElementById('m-link').href = jogo.link;
+            document.getElementById('gameModal').style.display = "flex";
         };
 
-        // Fechar modal
-        window.fecharModal = () => {
-            document.getElementById('gameModal').style.display = "none";
-            document.body.style.overflow = '';
-        };
-
-        // Fechar com ESC ou clique fora
-        window.onclick = (event) => {
-            const modal = document.getElementById('gameModal');
-            if (event.target === modal) {
-                fecharModal();
-            }
-        };
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                fecharModal();
-            }
-        });
-
-        // Filtros
-        const searchInput = document.getElementById('searchInput');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        
-        searchInput.addEventListener('input', (e) => {
-            const termo = e.target.value.toLowerCase();
-            const filtrados = todosJogos.filter(jogo => 
-                jogo.nome.toLowerCase().includes(termo) ||
-                (jogo.descricao && jogo.descricao.to
+        window.fecharModal = () => document.getElementById('gameModal').style.display = "none";
+    </script>
+</body>
+</html>
