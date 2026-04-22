@@ -3,38 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Catálogo de Jogos</title>
+    <title>Espaço dos Jogos | Catálogo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; }
-        .form-container { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        input, textarea { width: 100%; margin: 10px 0; padding: 10px; border-radius: 4px; border: none; }
-        button { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
-        .game-card { background: #1e1e1e; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 5px solid #28a745; }
-        .game-card h3 { margin: 0; }
-        .game-card a { color: #007bff; text-decoration: none; font-weight: bold; }
+        :root {
+            --bg-body: #0f1216;
+            --bg-card: #1c2229;
+            --accent: #27c45d;
+            --text-main: #ffffff;
+            --text-dim: #a0a6af;
+        }
+
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background: var(--bg-body); 
+            color: var(--text-main); 
+            margin: 0; padding: 0;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+
+        /* Estilo do Formulário */
+        .form-container { 
+            background: var(--bg-card); 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        h3 { margin-top: 0; color: var(--accent); }
+
+        input, textarea { 
+            width: 100%; 
+            margin: 8px 0; 
+            padding: 12px; 
+            border-radius: 6px; 
+            border: 1px solid #333; 
+            background: #121212; 
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button { 
+            background: var(--accent); 
+            color: #000; 
+            font-weight: bold;
+            border: none; 
+            padding: 12px 25px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        button:hover { opacity: 0.8; }
+
+        /* Grid de Jogos */
+        .grid-jogos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card { 
+            background: var(--bg-card); 
+            border-radius: 12px; 
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .game-card:hover { transform: translateY(-5px); }
+
+        .game-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            background: #2a2a2a;
+        }
+
+        .game-info { padding: 15px; }
+
+        .game-info h4 { margin: 0 0 10px 0; font-size: 1.2rem; }
+
+        .game-info p { 
+            color: var(--text-dim); 
+            font-size: 0.9rem; 
+            height: 40px; 
+            overflow: hidden; 
+        }
+
+        .btn-download {
+            display: block;
+            text-align: center;
+            background: #333;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 10px;
+            border: 1px solid var(--accent);
+        }
+
+        .btn-download:hover { background: var(--accent); color: #000; }
     </style>
 </head>
 <body>
 
-    <h1>🎮 Publicador de Jogos</h1>
+    <header>
+        <h1>🎮 ESPAÇO APK</h1>
+    </header>
 
-    <div class="form-container">
-        <h3>Adicionar Novo Jogo</h3>
-        <input type="text" id="nome" placeholder="Nome do Jogo">
-        <textarea id="descricao" placeholder="Descrição do jogo"></textarea>
-        <input type="text" id="link" placeholder="Link do Mediafire">
-        <input type="text" id="imagemUrl" placeholder="Link da Imagem (Opcional)">
-        <button onclick="salvarJogo()">Publicar Jogo</button>
-    </div>
-
-    <hr>
-
-    <div id="lista-jogos">
+    <div class="container">
+        <div class="form-container">
+            <h3>Publicar Novo Jogo</h3>
+            <input type="text" id="nome" placeholder="Nome do Jogo (Ex: FNaF 3 Plus)">
+            <textarea id="descricao" placeholder="Breve descrição do jogo..."></textarea>
+            <input type="text" id="link" placeholder="URL do Mediafire">
+            <input type="text" id="imagemUrl" placeholder="Link da Imagem (Ex: https://site.com/foto.jpg)">
+            <button onclick="salvarJogo()">PUBLICAR NO CATÁLOGO</button>
         </div>
+
+        <h2 style="border-left: 4px solid var(--accent); padding-left: 10px;">Catálogo Recente</h2>
+        
+        <div id="lista-jogos" class="grid-jogos">
+            </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyANG8-gOrsk3LZz_9kYqQnz-X7ZVbDQ6x4",
@@ -49,7 +155,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Função para salvar no Firestore
+        // Salvar Jogo
         window.salvarJogo = async () => {
             const nome = document.getElementById('nome').value;
             const descricao = document.getElementById('descricao').value;
@@ -59,35 +165,40 @@
             if (nome && link) {
                 try {
                     await addDoc(collection(db, "jogos"), {
-                        nome, descricao, link, imagemUrl, data: new Date()
+                        nome, descricao, link, imagemUrl, dataCriacao: new Date()
                     });
-                    alert("Jogo publicado!");
-                    document.querySelectorAll('input, textarea').forEach(i => i.value = '');
-                } catch (e) {
-                    console.error("Erro ao salvar: ", e);
-                }
-            } else {
-                alert("Preencha o nome e o link!");
-            }
+                    alert("Jogo adicionado com sucesso!");
+                    // Limpa os campos
+                    document.getElementById('nome').value = '';
+                    document.getElementById('descricao').value = '';
+                    document.getElementById('link').value = '';
+                    document.getElementById('imagemUrl').value = '';
+                } catch (e) { alert("Erro ao salvar!"); }
+            } else { alert("Nome e Link são obrigatórios!"); }
         };
 
-        // Função para carregar jogos em tempo real
-        onSnapshot(collection(db, "jogos"), (snapshot) => {
+        // Mostrar Jogos (Ordenados por data)
+        const q = query(collection(db, "jogos"), orderBy("dataCriacao", "desc"));
+        onSnapshot(q, (snapshot) => {
             const container = document.getElementById('lista-jogos');
-            container.innerHTML = "<h2>Catálogo</h2>";
+            container.innerHTML = "";
             snapshot.forEach((doc) => {
                 const jogo = doc.data();
+                // Se não tiver imagem, usa uma imagem padrão de "no-image"
+                const imgFinal = jogo.imagemUrl ? jogo.imagemUrl : 'https://via.placeholder.com/300x150?text=Sem+Imagem';
+                
                 container.innerHTML += `
                     <div class="game-card">
-                        ${jogo.imagemUrl ? `<img src="${jogo.imagemUrl}" style="width:100px; display:block; margin-bottom:10px;">` : ''}
-                        <h3>${jogo.nome}</h3>
-                        <p>${jogo.descricao}</p>
-                        <a href="${jogo.link}" target="_blank">⬇️ Baixar via Mediafire</a>
+                        <img src="${imgFinal}" class="game-img" alt="${jogo.nome}">
+                        <div class="game-info">
+                            <h4>${jogo.nome}</h4>
+                            <p>${jogo.descricao}</p>
+                            <a href="${jogo.link}" target="_blank" class="btn-download">DESCARREGAR</a>
+                        </div>
                     </div>
                 `;
             });
         });
     </script>
 </body>
-  </html>
-
+</html>
